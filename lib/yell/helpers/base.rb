@@ -7,6 +7,10 @@ module Yell #:nodoc:
       # stub
       def reset!(options = {})
       end
+
+      def inspectables
+        []
+      end
     end
   end
 end

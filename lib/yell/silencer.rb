@@ -12,7 +12,7 @@ module Yell #:nodoc:
     PRESETS = {
       # Rails
       assets: [%r{\AStarted GET "\/assets}, %r{\AServed asset/, /\A\s*\z}]
-    }.freeze
+    }
 
     def initialize(*patterns)
       @patterns = patterns.dup

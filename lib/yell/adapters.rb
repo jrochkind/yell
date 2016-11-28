@@ -8,28 +8,17 @@ module Yell #:nodoc:
   # the logger. You should not have to call the corresponding
   # classes directly.
   module Adapters
-    class Collection
-      def initialize # (options = {})
-        # @options = options
+    class Collection #:nodoc:
+      def initialize
         @collection = []
       end
 
       def add(type = :file, *args, &block)
-        # options = [@options, *args].inject({}) do |h, c|
         options = args.inject({}) do |h, c|
           h.merge([String, Pathname].include?(c.class) ? { filename: c } : c)
         end
 
-        # remove possible :null adapters
-        if @collection.is_a?(Array) && @collection.first.instance_of?(Yell::Adapters::Base)
-          @collection.shift
-        end
-
-        new_adapter = Yell::Adapters.new(type, options, &block)
-        @collection = [new_adapter, *@collection]
-        @collection = @collection.first if @collection.length == 1
-
-        new_adapter
+        add! Yell::Adapters.new(type, options, &block)
       end
 
       def empty?
@@ -54,6 +43,22 @@ module Yell #:nodoc:
         else
           @collection.each(&:close)
         end
+      end
+
+      private
+
+      def add!(adapter)
+        # remove possible :null adapters
+        if @collection.is_a?(Array) &&
+           @collection.first.instance_of?(Yell::Adapters::Base)
+          @collection.shift
+        end
+
+        # add to collection
+        @collection = [adapter, *@collection]
+        @collection = @collection.first if @collection.length == 1
+
+        adapter
       end
     end
 

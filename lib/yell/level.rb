@@ -42,20 +42,20 @@ module Yell #:nodoc:
     #
     # @param severity [Integer,String,Symbol,Array,Range,nil] The severity.
     def initialize(*severities)
+      @severities = Yell::Severities.map { true }
       set(*severities)
     end
 
     # Set the severity to the given format
-    def set(*severities)
-      @severities = Yell::Severities.map { true }
+    def set(*severities) # rubocop:disable Style/CyclomaticComplexity
       severity = severities.length > 1 ? severities : severities.first
 
       case severity
+      when Integer, Symbol then gte(severity)
+      when String then interpret(severity)
+      when Yell::Level then @severities = severity.severities
       when Array then at(*severity)
       when Range then gte(severity.first).lte(severity.last)
-      when String then interpret(severity)
-      when Integer, Symbol then gte(severity)
-      when Yell::Level then @severities = severity.severities
       end
     end
 
@@ -68,7 +68,6 @@ module Yell #:nodoc:
     # @return [Boolean] tru or false
     def at?(severity)
       index = index_from(severity)
-
       index.nil? ? false : @severities[index]
     end
 
@@ -79,7 +78,7 @@ module Yell #:nodoc:
     #
     # @return [Yell::Level] the instance
     def at(*severities)
-      severities.each { |severity| calculate! :==, severity }
+      severities.each { |severity| calculate!(:==, severity) }
       self
     end
 
@@ -90,7 +89,7 @@ module Yell #:nodoc:
     #
     # @return [Yell::Level] the instance
     def gt(severity)
-      calculate! :>, severity
+      calculate!(:>, severity)
       self
     end
 
@@ -101,7 +100,7 @@ module Yell #:nodoc:
     #
     # @return [Yell::Level] the instance
     def gte(severity)
-      calculate! :>=, severity
+      calculate!(:>=, severity)
       self
     end
 
@@ -112,7 +111,7 @@ module Yell #:nodoc:
     #
     # @return [Yell::Level] the instance
     def lt(severity)
-      calculate! :<, severity
+      calculate!(:<, severity)
       self
     end
 
@@ -123,7 +122,7 @@ module Yell #:nodoc:
     #
     # @return [Yell::Level] the instance
     def lte(severity)
-      calculate! :<=, severity
+      calculate!(:<=, severity)
       self
     end
 
@@ -133,24 +132,14 @@ module Yell #:nodoc:
     end
     alias to_int to_i
 
-    # Get a pretty string representation of the level, including the severities.
-    def inspect
-      inspectables = Yell::Severities.select.with_index do |_l, i|
-        !@severities[i].nil?
-      end
+    protected
 
-      "#<#{self.class.name} severities: #{inspectables * ', '}>"
-    end
-
-    # @private
     attr_reader :severities
 
-    # @private
     def ==(other)
       other.respond_to?(:severities) ? severities == other.severities : super
     end
 
-    # @private
     def <=>(other)
       other.is_a?(Numeric) ? to_i <=> other : super
     end
@@ -158,11 +147,11 @@ module Yell #:nodoc:
     private
 
     def interpret(severities)
-      severities.split(' ').each do |severity|
+      severities.split(/\s+/).each do |severity|
         m = REGEX.match(severity)
         next if m.nil?
 
-        m[1].nil? ? __send__(:gte, m[2]) : __send__(m[1], m[2])
+        m[1].nil? ? gte(m[2]) : __send__(m[1], m[2])
       end
     end
 
@@ -184,13 +173,6 @@ module Yell #:nodoc:
       end
     end
 
-    def index_from(severity)
-      case severity
-      when String, Symbol then Yell::Severities.index(severity.to_s.upcase)
-      else Integer(severity)
-      end
-    end
-
     def ascending!(index)
       each_index { |i| @severities[i] = i < index ? false : true }
     end
@@ -199,16 +181,22 @@ module Yell #:nodoc:
       each_index { |i| @severities[i] = index < i ? false : true }
     end
 
+    def set!(index, val = true)
+      @severities.map! { false } unless tainted?
+      @severities[index] = val
+    end
+
+    def index_from(severity)
+      case severity
+      when String, Symbol then Yell::Severities.index(severity.to_s.upcase)
+      else Integer(severity)
+      end
+    end
+
     def each_index
       @severities.each_with_index do |severity, index|
         yield(index) if severity == true
       end
-    end
-
-    def set!(index, val = true)
-      @severities.map! { false } unless tainted?
-
-      @severities[index] = val
     end
   end
 end

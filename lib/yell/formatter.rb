@@ -7,7 +7,10 @@ require 'time'
 #   Yell::Formatter.register(:default)
 #
 # @example The Ruby standard logger format
-#   Yell::Formatter.register(:stdlogger, "%l, [%d #%p] %5L -- : %m", "%Y-%m-%dT%H:%M:%S.%6N")
+#   Yell::Formatter.register(
+#     :stdlogger,
+#     "%l, [%d #%p] %5L -- : %m", "%Y-%m-%dT%H:%M:%S.%6N"
+#   )
 #
 module Yell #:nodoc:
   # No format on the log message
@@ -71,7 +74,7 @@ module Yell #:nodoc:
       'd' => 'date(time)',
       'p' => '$$',
       'P' => 'progname'
-    )
+    ).freeze
 
     PatternMatcher = /^([^%]*)(%-?\d*)?(#{Table.keys.join('|')})?(.*)/m
 
@@ -109,12 +112,15 @@ module Yell #:nodoc:
 
     # Get a pretty string
     def inspect
-      "#<#{self.class.name}:#{object_id} pattern: #{@pattern.inspect}, date_pattern: #{@date_pattern.inspect}>"
+      "#<#{self.class.name}:#{object_id} " \
+        "pattern: #{@pattern.inspect}, " \
+        "date_pattern: #{@date_pattern.inspect}>"
     end
 
     private
 
-    # Message modifier class to allow different modifiers for different requirements.
+    # Message modifier class to allow different modifiers for
+    # different requirements.
     class Modifier
       def initialize
         @repository = {}
@@ -201,7 +207,7 @@ module Yell #:nodoc:
         buff.concat(match[1]) unless match[1].empty?
         break if match[2].nil?
 
-        buff.concat(match[2] + 's')
+        buff = buff + match[2] + 's'
         args.push(table[match[3]] || "'%'")
 
         _pattern = match[4]

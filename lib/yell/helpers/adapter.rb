@@ -19,9 +19,9 @@ module Yell #:nodoc:
       # @example Set the adapter directly from an adapter instance
       #   adapter Yell::Adapter::File.new
       #
-      # @param [Symbol] type The type of the adapter
+      # @param type [Symbol] The type of the adapter (default `:file`)
       # @return [Yell::Adapter] The instance
-      # @raise [Yell::NoSuchAdapter] Will be thrown when the adapter is not defined
+      # @raise [Yell::NoSuchAdapter] Will be thrown when the adapter undefined
       def adapter(type = :file, *args, &block)
         adapters.add(type, *args, &block)
       end
@@ -33,14 +33,14 @@ module Yell #:nodoc:
       private
 
       def reset!(options = {})
+        # rubocop:disable Style/VariableNumber
         @__adapters__ = Yell::Adapters::Collection.new
+        # rubocop:enable Style/VariableNumber
 
-        presets = Yell.__fetch__(options, :adapters, default: [])
+        presets = Yell.__fetch__(options, :adapters, default: [], delete: true)
         presets.each do |preset|
           if preset.is_a?(Hash)
-            Array(preset).each do |type, name|
-              adapters.add(type, name, options)
-            end
+            Array(preset).each { |type, name| adapter(type, name, options) }
           else
             adapters.add(preset, options)
           end

@@ -99,29 +99,29 @@ module Yell #:nodoc:
         #   end
         def compile!(name, &block)
           # Get the already defined method
-          m = instance_method(name)
+          old_method = instance_method(name)
 
           # Create a new method with leading underscore
           define_method("_#{name}", &block)
-          _m = instance_method("_#{name}")
+          new_method = instance_method("_#{name}")
           remove_method("_#{name}")
 
           # Define instance method
-          define!(name, _m, m, &block)
+          define!(name, new_method, old_method, &block)
         end
 
         # Define instance method by given name and call the unbound
         # methods in order with provided block.
-        def define!(name, _m, m, &block)
-          if block.arity == 0
+        def define!(name, new_method, old_method, &block)
+          if block.arity.zero?
             define_method(name) do
-              _m.bind(self).call
-              m.bind(self).call
+              new_method.bind(self).call
+              old_method.bind(self).call
             end
           else
             define_method(name) do |*args|
-              _m.bind(self).call(*args)
-              m.bind(self).call(*args)
+              new_method.bind(self).call(*args)
+              old_method.bind(self).call(*args)
             end
           end
         end
@@ -144,7 +144,7 @@ module Yell #:nodoc:
       # actually write or not.
       def write(event)
         synchronize { write!(event) } if write?(event)
-      rescue Exception => e
+      rescue Exception => e # rubocop:disable Lint/RescueException
         # make sure the adapter is closed and re-raise the exception
         synchronize { close }
 
