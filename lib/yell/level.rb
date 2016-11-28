@@ -132,14 +132,15 @@ module Yell #:nodoc:
     end
     alias to_int to_i
 
-    protected
-
+    # @private
     attr_reader :severities
 
+    # @private
     def ==(other)
       other.respond_to?(:severities) ? severities == other.severities : super
     end
 
+    # @private
     def <=>(other)
       other.is_a?(Numeric) ? to_i <=> other : super
     end

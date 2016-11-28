@@ -106,7 +106,9 @@ module Yell #:nodoc:
     # @private
     def __fetch__(hash, *args)
       options = args.last.is_a?(Hash) ? args.pop : {}
-      value = args.map { |key| hash.fetch(key.to_sym, hash[key.to_s]) }.first
+      value = args.map do |key|
+        hash.fetch(key.to_sym, hash[key.to_s])
+      end.compact.first
 
       if options[:delete]
         args.map(&:to_s).each { |key| hash.delete(key) }

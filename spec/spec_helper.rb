@@ -129,7 +129,7 @@ RSpec.configure do |config|
   private
 
   def fixture_path
-    path = File.expand_path('fixtures', File.dirname(__FILE__))
+    path = File.join(File.dirname(__FILE__), 'fixtures')
     Pathname.new(path)
   end
 end
