@@ -95,12 +95,12 @@ module Yell #:nodoc:
       #
       # @return [Boolean] true or false
       def close?
-        _date           = Time.now
-        _date_strftime  = _date.strftime(date_pattern)
+        date           = Time.now
+        date_strftime  = date.strftime(date_pattern)
 
-        if @stream.nil? || _date_strftime != @date_strftime
-          @date = _date
-          @date_strftime = _date_strftime
+        if @stream.nil? || date_strftime != @date_strftime
+          @date = date
+          @date_strftime = date_strftime
 
           return true
         end
@@ -130,7 +130,7 @@ module Yell #:nodoc:
       #
       # @return [Boolean] true or false
       def cleanup?
-        !!keep && keep.to_i > 0
+        keep && Integer(keep).positive?
       end
 
       # Symlink the current filename to the original one.
@@ -146,7 +146,7 @@ module Yell #:nodoc:
       #
       # @return [Boolean] true or false
       def symlink?
-        !!symlink
+        symlink == true
       end
 
       # Write the header information into the file
@@ -158,7 +158,7 @@ module Yell #:nodoc:
       #
       # @return [Boolean] true or false
       def header?
-        !!header
+        header == true
       end
 
       # Sets the filename with the `:date_pattern` appended to it.

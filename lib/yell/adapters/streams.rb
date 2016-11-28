@@ -2,7 +2,7 @@
 
 module Yell #:nodoc:
   module Adapters #:nodoc:
-    class Stdout < Yell::Adapters::Io
+    class Stdout < Yell::Adapters::Io #:nodoc:
       private
 
       # @overload open!
@@ -12,7 +12,7 @@ module Yell #:nodoc:
       end
     end
 
-    class Stderr < Yell::Adapters::Io
+    class Stderr < Yell::Adapters::Io #:nodoc:
       private
 
       # @overload open!

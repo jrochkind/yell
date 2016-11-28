@@ -8,13 +8,6 @@ module Yell #:nodoc:
   # Yell::Event.new( :info, 'Hello World', { :scope => 'Application' } )
   # #=> Hello World scope: Application
   class Event
-    # Prefetch those values (no need to do that on every new instance)
-    @@hostname = begin
-                    Socket.gethostname
-                  rescue
-                    nil
-                  end
-
     # Accessor to the log level
     attr_reader :level
 
@@ -27,16 +20,16 @@ module Yell #:nodoc:
     # Accessor to the logger's name
     attr_reader :name
 
+    # Accessor to the hostname
+    attr_reader :hostname
+
     def initialize(logger, level, *messages)
       @time = Time.now
+      @hostname = Socket.gethostname
+
       @name = logger.name
       @level = level
       @messages = messages
-    end
-
-    # Accessor to the hostname
-    def hostname
-      @@hostname
     end
 
     # Accessor to the progname

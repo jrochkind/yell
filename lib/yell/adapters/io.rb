@@ -2,7 +2,7 @@
 
 module Yell #:nodoc:
   module Adapters #:nodoc:
-    class Io < Yell::Adapters::Base
+    class Io < Yell::Adapters::Base #:nodoc:
       include Yell::Helpers::Formatter
 
       # The possible unix log colors
@@ -16,7 +16,7 @@ module Yell #:nodoc:
         -1  => "\033[0m"      # normal
       }.freeze
 
-      # Sets the “sync mode” to true or false.
+      # Sets the sync mode to true or false.
       #
       # When true (default), every log event is immediately written to the file.
       # When false, the log event is buffered internally.
@@ -86,7 +86,10 @@ module Yell #:nodoc:
       # Adapter classes should provide their own implementation
       # of this method.
       def stream
-        synchronize { open! if @stream.nil?; @stream }
+        synchronize do
+          open! if @stream.nil?
+          @stream
+        end
       end
 
       # @overload inspectables

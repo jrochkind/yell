@@ -47,7 +47,7 @@ module Yell #:nodoc:
     end
 
     # Set the severity to the given format
-    def set(*severities) # rubocop:disable Style/CyclomaticComplexity
+    def set(*severities)
       severity = severities.length > 1 ? severities : severities.first
 
       case severity

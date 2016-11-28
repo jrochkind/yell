@@ -139,7 +139,7 @@ module Yell #:nodoc:
           message.map { |k, v| "#{k}: #{v}" }.join(', ')
         elsif message.is_a?(Exception)
           backtrace = message.backtrace ? "\n\t#{message.backtrace.join("\n\t")}" : ''
-          sprintf('%s: %s%s', message.class, message.message, backtrace)
+          format('%s: %s%s', message.class, message.message, backtrace)
         else
           message
         end
@@ -177,7 +177,7 @@ module Yell #:nodoc:
             when String then 't.strftime(@date_pattern)'
             when Symbol then "t.send(#{@date_pattern})"
             else 't.iso8601'
-      end
+            end
 
       # define the method
       instance_eval <<-METHOD, __FILE__, __LINE__
@@ -199,10 +199,10 @@ module Yell #:nodoc:
     def to_sprintf(table)
       buff = ''
       args = []
-      _pattern = @pattern.dup
+      patt = @pattern.dup
 
       loop do
-        match = PatternMatcher.match(_pattern)
+        match = PatternMatcher.match(patt)
 
         buff.concat(match[1]) unless match[1].empty?
         break if match[2].nil?
@@ -210,7 +210,7 @@ module Yell #:nodoc:
         buff = buff + match[2] + 's'
         args.push(table[match[3]] || "'%'")
 
-        _pattern = match[4]
+        patt = match[4]
       end
 
       %{sprintf("#{buff.gsub(/"/, '\"')}", #{args.join(', ')})}

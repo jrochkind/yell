@@ -11,8 +11,8 @@ module Yell #:nodoc:
   class Silencer
     PRESETS = {
       # Rails
-      assets: [%r{\AStarted GET "\/assets}, %r{\AServed asset/, /\A\s*\z}]
-    }
+      assets: [%r{\AStarted GET "\/assets}, %r{\AServed asset/, /\A\s*\z}].freeze
+    }.freeze
 
     def initialize(*patterns)
       @patterns = patterns.dup
