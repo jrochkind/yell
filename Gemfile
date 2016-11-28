@@ -6,6 +6,7 @@ gemspec
 
 group :development, :test do
   gem 'rake'
+  gem 'activesupport', '~> 5'
 
   gem 'rspec-core', '>= 3.5', '< 4'
   gem 'rspec-expectations'
@@ -15,8 +16,7 @@ group :development, :test do
   gem 'timecop'
   gem 'byebug', platform: :mri
 
-  gem 'activesupport', '~> 5'
-
   gem 'simplecov', require: false
   gem 'coveralls', require: false
+  gem 'rubocop', require: false
 end
