@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Yell #:nodoc:
   # Raised when a silencer preset was not found.
   class SilencerNotFound < StandardError

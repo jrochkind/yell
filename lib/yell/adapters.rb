@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Yell #:nodoc:
   # AdapterNotFound is raised whenever you want to instantiate an
   # adapter that does not exist.

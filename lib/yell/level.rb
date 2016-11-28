@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yell #:nodoc:
   # The +Level+ class handles the severities for you in order to determine
   # if an adapter should log or not.

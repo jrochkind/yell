@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 module Yell #:nodoc:
   module Adapters #:nodoc:
     # The +Datefile+ adapter is similar to the +File+ adapter. However, it
     # rotates the file at midnight (by default).
     class Datefile < Yell::Adapters::File
       # The default date pattern, e.g. "19820114" (14 Jan 1982)
-      DefaultDatePattern = '%Y%m%d'
+      DefaultDatePattern = '%Y%m%d'.freeze
 
       # Metadata
       Header = ->(date, pattern) { "# -*- #{date.iso8601} (#{date.to_f}) [#{pattern}] -*-" }
@@ -130,7 +128,7 @@ module Yell #:nodoc:
       #
       # @return [Boolean] true or false
       def cleanup?
-        keep && Integer(keep).positive?
+        keep && Integer(keep) > 0
       end
 
       # Symlink the current filename to the original one.

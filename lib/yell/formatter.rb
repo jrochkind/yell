@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require 'time'
 
 # TODO: Register custom formats
@@ -19,7 +18,7 @@ module Yell #:nodoc:
   #   logger = Yell.new STDOUT, :format => false
   #   logger.info "Hello World!"
   #   #=> "Hello World!"
-  NoFormat = '%m'
+  NoFormat = '%m'.freeze
 
   # Default Format
   #
@@ -29,7 +28,7 @@ module Yell #:nodoc:
   #   #=> "2012-02-29T09:30:00+01:00 [ INFO] 65784 : Hello World!"
   #   #    ^                         ^       ^       ^
   #   #    ISO8601 Timestamp         Level   Pid     Message
-  DefaultFormat = '%d [%5L] %p : %m'
+  DefaultFormat = '%d [%5L] %p : %m'.freeze
 
   # Basic Format
   #
@@ -40,7 +39,7 @@ module Yell #:nodoc:
   #   #    ^  ^                          ^
   #   #    ^  ISO8601 Timestamp          Message
   #   #    Level (short)
-  BasicFormat = '%l, %d : %m'
+  BasicFormat = '%l, %d : %m'.freeze
 
   # Extended Format
   #
@@ -50,7 +49,7 @@ module Yell #:nodoc:
   #   #=> "2012-02-29T09:30:00+01:00 [ INFO] 65784 localhost : Hello World!"
   #   #    ^                          ^      ^     ^           ^
   #   #    ISO8601 Timestamp          Level  Pid   Hostname    Message
-  ExtendedFormat = '%d [%5L] %p %h : %m'
+  ExtendedFormat = '%d [%5L] %p %h : %m'.freeze
 
   # The +Formatter+ provides a handle to configure your log message style.
   class Formatter

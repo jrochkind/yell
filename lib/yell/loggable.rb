@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yell #:nodoc:
   # Include this module to add a logger to any class.
   #

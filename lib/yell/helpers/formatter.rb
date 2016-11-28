@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Yell #:nodoc:
   module Helpers #:nodoc:
     module Formatter #:nodoc:

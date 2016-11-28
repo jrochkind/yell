@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yell #:nodoc:
   module Adapters #:nodoc:
     class Io < Yell::Adapters::Base #:nodoc:

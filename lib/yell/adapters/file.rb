@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yell #:nodoc:
   module Adapters #:nodoc:
     # The +File+ adapter is the most basic. As one would expect, it's used
