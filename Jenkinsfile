@@ -1,9 +1,19 @@
-node {
-  checkout scm
+pipeline {
+  agent {
+    docker 'ruby'
+  }
 
-  stage 'Build'
-  sh 'bundle install'
+  stages {
+    stage('Build') {
+      steps {
+        sh 'bundle install'
+      }
+    }
 
-  stage 'Test'
-  sh 'bundle exec rspec'
+    stage('Test') {
+      steps {
+        sh 'bundle exec rspec'
+      }
+    }
+  }
 }
