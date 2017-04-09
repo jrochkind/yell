@@ -1,4 +1,6 @@
 node {
+  checkout scm
+
   stage 'Build'
   sh 'bundle install'
 
