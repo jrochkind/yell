@@ -1,19 +1,7 @@
-pipeline {
-  agent {
-    docker 'ruby'
-  }
+node {
+  stage 'Build'
+  sh 'bundle install'
 
-  stages {
-    stage('Build') {
-      steps {
-        sh 'bundle install'
-      }
-    }
-
-    stage('Test') {
-      steps {
-        sh 'bundle exec rspec'
-      }
-    }
-  }
+  stage 'Test'
+  sh 'bundle exec rspec'
 }
