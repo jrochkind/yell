@@ -201,7 +201,7 @@ module Yell #:nodoc:
     end
 
     def to_sprintf( table )
-      buff, args, _pattern = "", [], @pattern.dup
+      buff, args, _pattern = String.new, [], @pattern.dup
 
       while true
         match = PatternMatcher.match(_pattern)
